@@ -1,12 +1,16 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import Timer from './CDTimer';
-import Utils from './Utils';
 import refs from './refs';
 
 const REFRESH_RATE = 1000;
+const cdTimer = new Timer();
 
 initInterface();
+refs.startBtn.addEventListener('click', () => {
+  toggleButton(refs.startBtn);
+  setInterval(onTimerStart, REFRESH_RATE);
+});
 
 function initInterface() {
   toggleButton(refs.startBtn);
@@ -17,11 +21,13 @@ function initInterface() {
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
-      const cdTimer = new Timer(selectedDates[0].getTime());
+      cdTimer.endTime = selectedDates[0].getTime();
+      if (!cdTimer.setted) {
+        alert('Please choose a date in the future!');
+        return;
+      }
+      toggleButton(refs.startBtn);
       updateTimerUI(refs, cdTimer.processedDate());
-      const interval = setInterval(() => {
-        updateTimerUI(refs, cdTimer.processedDate());
-      }, REFRESH_RATE);
     },
   };
 
@@ -39,4 +45,8 @@ function updateTimerUI(timerUIRefs, dateData) {
   hours.innerText = dateData.hours;
   mins.innerText = dateData.minutes;
   secs.innerText = dateData.seconds;
+}
+
+function onTimerStart() {
+  updateTimerUI(refs, cdTimer.processedDate());
 }

@@ -1,17 +1,11 @@
 import Utils from './Utils';
 
-const REFRESH_RATE = 1000;
-
 export default class CDTimer {
   constructor(endTime = Date.now()) {
     this.startTime = this.currentTime;
     this.endTime = endTime;
-    this.setted = this.estimatedTime() > 0 ? true : false;
+    this.setted = this.estimatedTime() > 0;
   }
-
-  startTimer() {}
-
-  stopTimer() {}
 
   set startTime(newTime = this.currentTime) {
     this._startTime = newTime;
@@ -23,10 +17,19 @@ export default class CDTimer {
 
   set endTime(newEndTime) {
     this._endTime = newEndTime;
+    this.setted = this.estimatedTime() > 0;
   }
 
   get endTime() {
     return this._endTime;
+  }
+
+  set setted(isSetted) {
+    this._setted = isSetted;
+  }
+
+  get setted() {
+    return this._setted;
   }
 
   get currentTime() {
