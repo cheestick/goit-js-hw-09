@@ -1,7 +1,7 @@
 export default {
   startBtn: document.querySelector('button[data-start]'),
-  daysComp: document.querySelector('span[data-days]'),
-  hoursComp: document.querySelector('span[data-hours]'),
-  minutesComp: document.querySelector('span[data-minutes]'),
-  secondsComp: document.querySelector('span[data-seconds]'),
+  days: document.querySelector('span[data-days]'),
+  hours: document.querySelector('span[data-hours]'),
+  mins: document.querySelector('span[data-minutes]'),
+  secs: document.querySelector('span[data-seconds]'),
 };

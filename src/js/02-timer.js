@@ -9,29 +9,34 @@ const REFRESH_RATE = 1000;
 initInterface();
 
 function initInterface() {
+  toggleButton(refs.startBtn);
+
   const options = {
     enableTime: true,
     time_24hr: true,
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
-      console.dir(selectedDates[0].getTime());
       const cdTimer = new Timer(selectedDates[0].getTime());
-      console.log(cdTimer);
+      updateTimerUI(refs, cdTimer.processedDate());
       const interval = setInterval(() => {
-        const date = cdTimer.processedTime();
-        refs.daysComp.innerText = Utils.addLeadingZeto(date.days);
-        refs.hoursComp.innerText = Utils.addLeadingZeto(date.hours);
-        refs.minutesComp.innerText = Utils.addLeadingZeto(date.minutes);
-        refs.secondsComp.innerText = Utils.addLeadingZeto(date.seconds);
+        updateTimerUI(refs, cdTimer.processedDate());
       }, REFRESH_RATE);
     },
   };
 
-  const fp = flatpickr('#datetime-picker', options);
-  toggleButton(refs.startBtn);
+  flatpickr('#datetime-picker', options);
 }
 
 function toggleButton(button) {
   button.disabled = !button.disabled;
+}
+
+function updateTimerUI(timerUIRefs, dateData) {
+  const { days, hours, mins, secs } = timerUIRefs;
+
+  days.innerText = Utils.addLeadingZeto(dateData.days);
+  hours.innerText = Utils.addLeadingZeto(dateData.hours);
+  mins.innerText = Utils.addLeadingZeto(dateData.minutes);
+  secs.innerText = Utils.addLeadingZeto(dateData.seconds);
 }
