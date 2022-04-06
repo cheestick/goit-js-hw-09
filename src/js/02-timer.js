@@ -1,13 +1,10 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import Timer from './CDTimer';
+import Utils from './Utils';
+import refs from './refs';
 
-const refs = {
-  startBtn: document.querySelector('button[data-start]'),
-  daysComp: document.querySelector('span[data-days]'),
-  hoursComp: document.querySelector('span[data-hours]'),
-  minutesComp: document.querySelector('span[data-minutes]'),
-  secondsComp: document.querySelector('span[data-seconds]'),
-};
+const REFRESH_RATE = 1000;
 
 initInterface();
 
@@ -18,39 +15,23 @@ function initInterface() {
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
-      console.log(selectedDates[0]);
+      console.dir(selectedDates[0].getTime());
+      const cdTimer = new Timer(selectedDates[0].getTime());
+      console.log(cdTimer);
+      const interval = setInterval(() => {
+        const date = cdTimer.processedTime();
+        refs.daysComp.innerText = Utils.addLeadingZeto(date.days);
+        refs.hoursComp.innerText = Utils.addLeadingZeto(date.hours);
+        refs.minutesComp.innerText = Utils.addLeadingZeto(date.minutes);
+        refs.secondsComp.innerText = Utils.addLeadingZeto(date.seconds);
+      }, REFRESH_RATE);
     },
   };
 
-  flatpickr('#datetime-picker', options);
+  const fp = flatpickr('#datetime-picker', options);
   toggleButton(refs.startBtn);
 }
 
 function toggleButton(button) {
   button.disabled = !button.disabled;
-}
-
-/*  UTILITY FUNCTIONS */
-
-function convertMs(ms) {
-  // Number of milliseconds per unit of time
-  const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
-
-  // Remaining days
-  const days = Math.floor(ms / day);
-  // Remaining hours
-  const hours = Math.floor((ms % day) / hour);
-  // Remaining minutes
-  const minutes = Math.floor(((ms % day) % hour) / minute);
-  // Remaining seconds
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-
-  return { days, hours, minutes, seconds };
-}
-
-function addLeadingZeto(value) {
-  return value.toString().padStart(2, '0');
 }
