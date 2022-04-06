@@ -5,15 +5,17 @@ import refs from './refs';
 
 const REFRESH_RATE = 1000;
 const cdTimer = new Timer();
+let intervalId = null;
 
 initInterface();
 refs.startBtn.addEventListener('click', () => {
-  toggleButton(refs.startBtn);
-  setInterval(onTimerStart, REFRESH_RATE);
+  disableStartButton();
+  updateTimerUI(refs, cdTimer.processedDate());
+  intervalId = setInterval(onTimerStart, REFRESH_RATE);
 });
 
 function initInterface() {
-  toggleButton(refs.startBtn);
+  disableStartButton();
 
   const options = {
     enableTime: true,
@@ -23,19 +25,15 @@ function initInterface() {
     onClose(selectedDates) {
       cdTimer.endTime = selectedDates[0].getTime();
       if (!cdTimer.setted) {
+        disableStartButton();
         alert('Please choose a date in the future!');
         return;
       }
-      toggleButton(refs.startBtn);
-      updateTimerUI(refs, cdTimer.processedDate());
+      enableStartButton();
     },
   };
 
   flatpickr('#datetime-picker', options);
-}
-
-function toggleButton(button) {
-  button.disabled = !button.disabled;
 }
 
 function updateTimerUI(timerUIRefs, dateData) {
@@ -48,5 +46,21 @@ function updateTimerUI(timerUIRefs, dateData) {
 }
 
 function onTimerStart() {
+  if (cdTimer.stopped) {
+    clearInterval(intervalId);
+    return;
+  }
   updateTimerUI(refs, cdTimer.processedDate());
+}
+
+function enableStartButton() {
+  refs.startBtn.disabled = false;
+}
+
+function disableStartButton() {
+  refs.startBtn.disabled = true;
+}
+
+function toggleButton(button) {
+  button.disabled = !button.disabled;
 }

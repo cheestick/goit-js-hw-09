@@ -5,6 +5,7 @@ export default class CDTimer {
     this.startTime = this.currentTime;
     this.endTime = endTime;
     this.setted = this.estimatedTime() > 0;
+    this.stopped = this.estimatedTime() < 1;
   }
 
   set startTime(newTime = this.currentTime) {
@@ -18,6 +19,7 @@ export default class CDTimer {
   set endTime(newEndTime) {
     this._endTime = newEndTime;
     this.setted = this.estimatedTime() > 0;
+    this.stopped = this.estimatedTime() < 1;
   }
 
   get endTime() {
@@ -37,7 +39,12 @@ export default class CDTimer {
   }
 
   estimatedTime() {
-    return this.endTime - this.currentTime;
+    const estTime = this.endTime - this.currentTime;
+    if (estTime <= 0) {
+      this.stopped = true;
+      return 0;
+    }
+    return estTime;
   }
 
   processedDate() {
