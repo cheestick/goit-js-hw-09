@@ -7,13 +7,13 @@ export default class Utils {
     const day = hour * 24;
 
     // Remaining days
-    const days = Math.floor(ms / day);
+    const days = Utils.addLeadingZeto(Math.floor(ms / day));
     // Remaining hours
-    const hours = Math.floor((ms % day) / hour);
+    const hours = Utils.addLeadingZeto(Math.floor((ms % day) / hour));
     // Remaining minutes
-    const minutes = Math.floor(((ms % day) % hour) / minute);
+    const minutes = Utils.addLeadingZeto(Math.floor(((ms % day) % hour) / minute));
     // Remaining seconds
-    const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+    const seconds = Utils.addLeadingZeto(Math.floor((((ms % day) % hour) % minute) / second));
 
     return { days, hours, minutes, seconds };
   }

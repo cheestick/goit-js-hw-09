@@ -35,8 +35,8 @@ function toggleButton(button) {
 function updateTimerUI(timerUIRefs, dateData) {
   const { days, hours, mins, secs } = timerUIRefs;
 
-  days.innerText = Utils.addLeadingZeto(dateData.days);
-  hours.innerText = Utils.addLeadingZeto(dateData.hours);
-  mins.innerText = Utils.addLeadingZeto(dateData.minutes);
-  secs.innerText = Utils.addLeadingZeto(dateData.seconds);
+  days.innerText = dateData.days;
+  hours.innerText = dateData.hours;
+  mins.innerText = dateData.minutes;
+  secs.innerText = dateData.seconds;
 }
