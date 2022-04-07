@@ -2,6 +2,7 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import Timer from './CDTimer';
 import refs from './refs';
+import { Notify } from 'notiflix';
 
 const REFRESH_RATE = 1000;
 const cdTimer = new Timer();
@@ -26,7 +27,7 @@ function initInterface() {
       cdTimer.endTime = selectedDates[0].getTime();
       if (!cdTimer.setted) {
         disableStartButton();
-        alert('Please choose a date in the future!');
+        Notify.failure('Please choose a date in the future!');
         return;
       }
       enableStartButton();
